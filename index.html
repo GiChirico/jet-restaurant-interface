@@ -3,11 +3,39 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="styles.css" />
-    <script src="script.js"></script>
+    <link href="./output.css" rel="stylesheet" />
     <title>JET Restaurant Interface</title>
   </head>
   <body>
+    <main>
+      <header>
+        <div class="flex items-center">
+          <img
+            class="size-16"
+            src="./src/take-away.png"
+            alt="food delivery logo"
+          />
+          <h1>JET Restaurant Inferface</h1>
+        </div>
+      </header>
+      <h1>Have food delivered anywhere you are!</h1>
+      <div>
+        <input
+          type="text"
+          name="postcode-input"
+          id="postcode-input"
+          placeholder="Type your postcode..."
+        />
+        <button id="submit-btn">Search 🔎</button>
+      </div>
+    </main>
+    <footer>
+      <a
+        href="https://www.flaticon.com/free-icons/food-delivery"
+        title="food delivery icons"
+        >Food delivery icons created by iconixar - Flaticon</a
+      >
+    </footer>
     <script src="script.js"></script>
   </body>
 </html>
