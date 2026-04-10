@@ -32,6 +32,43 @@
         <button id="btn-sort-asc">⬆ SORT Rating</button>
         <button id="btn-sort-desc">⬇ SORT Rating</button>
       </div>
+      <div
+        id="container-filter"
+        class="relative inline-block text-left w-full max-w-xs"
+      >
+        <div class="flex items-center gap-3 w-full max-w-xs">
+          <!-- Filter Dropdown Button -->
+          <button
+            id="filter-dropdown-btn"
+            class="flex-1 flex items-center justify-between px-4 py-2.5 bg-white border border-gray-300 rounded-xl shadow-sm hover:border-gray-400 focus:outline-none text-sm"
+          >
+            <span class="text-gray-700">Filter by Cuisine</span>
+            <span class="text-gray-500 text-xs">▼</span>
+          </button>
+
+          <!-- Apply Filters Button -->
+          <button
+            id="apply-filters-btn"
+            class="px-6 py-2.5 bg-red-500 hover:bg-red-600 text-white font-medium rounded-xl shadow-sm transition-colors duration-200 text-sm whitespace-nowrap"
+          >
+            Apply Filters
+          </button>
+          <button
+            id="reset-filters-btn"
+            class="px-6 py-2.5 bg-red-500 hover:bg-red-600 text-white font-medium rounded-xl shadow-sm transition-colors duration-200 text-sm whitespace-nowrap"
+          >
+            Reset Filters
+          </button>
+        </div>
+        <div
+          id="filter-dropdown-menu"
+          class="hidden absolute mt-2 w-72 bg-white border border-gray-200 rounded-2xl shadow-xl z-50 max-h-64 overflow-auto py-2"
+        >
+          <div class="p-3 space-y-2" id="cuisine-list">
+            <!-- Checkboxes will be added here by JavaScript -->
+          </div>
+        </div>
+      </div>
       <div id="container-restaurants"></div>
     </main>
     <footer>

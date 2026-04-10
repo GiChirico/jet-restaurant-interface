@@ -6,29 +6,30 @@ const postcodeInput = document.getElementById('postcode-input');
 const containerRestaurants = document.getElementById('container-restaurants');
 const sortAscBtn = document.getElementById('btn-sort-asc');
 const sortDescBtn = document.getElementById('btn-sort-desc');
+const filterDropBtn = document.getElementById('filter-dropdown-btn');
+const filterDropMenu = document.getElementById('filter-dropdown-menu');
+const cuisineList = document.getElementById('cuisine-list');
+const applyFilterBtn = document.getElementById('apply-filters-btn');
+const resetFilterBtn = document.getElementById('reset-filters-btn');
 
 // Global variables
 let sortAsc = false;
 let sortDesc = false;
 let firstTenRests = [];
-let filteredCuisines = [],
+let filteredRests = [];
+let checkedCuisines;
 
 // Functions
-
 // Render restaurants
-
 const renderRestaurants = function (
   firstTenRests,
   sortAsc = false,
   sortDesc = false,
 ) {
-  console.log(firstTenRests);
-
   // clean container
   containerRestaurants.innerHTML = '';
 
   let currentRests = firstTenRests;
-  console.log(currentRests);
 
   // sorting
   if (sortAsc && !sortDesc)
@@ -59,7 +60,32 @@ const renderRestaurants = function (
 };
 
 // Filter by Cuisine
+const renderFilterCheckbox = function (firstTenRests) {
+  console.log(firstTenRests);
+  // clear filter list
+  cuisineList.innerHTML = '';
 
+  // retrieve cuisines
+  const cuisines = [
+    ...new Set(
+      firstTenRests
+        .flatMap(restaurant => restaurant.cuisines.slice(0, 2))
+        .map(cuisine => cuisine.name),
+    ),
+  ];
+
+  // add cuisines as checkboxes
+
+  cuisines.forEach(cuisine => {
+    let checkboxHTML = `
+    <div class="flex items-center gap-3 px-3 py-2 hover:bg-gray-100 rounded-xl cursor-pointer">
+      <input type="checkbox" id="${cuisine.toLowerCase()}" name="${cuisine}" class="w-4 h-4 accent-red-500"/>
+      <label for="${cuisine.toLowerCase()}" class="text-gray-700">${cuisine}</label>
+    </div>`;
+
+    cuisineList.insertAdjacentHTML('beforeend', checkboxHTML);
+  });
+};
 
 // Rejected Promise Error
 const renderError = function (msg) {
@@ -71,7 +97,6 @@ const renderError = function (msg) {
 // Event listeners
 
 // Get postcode input + Fetch
-
 submitPostcodeBtn.addEventListener('click', function () {
   let postcode = postcodeInput.value.trim().replaceAll(' ', '');
   const url = `https://uk.api.just-eat.io/discovery/uk/restaurants/enriched/bypostcode/${postcode}`;
@@ -92,7 +117,9 @@ submitPostcodeBtn.addEventListener('click', function () {
 
         // display restaurants
         renderRestaurants(firstTenRests);
-        // 
+
+        // render cuisines array for filter
+        renderFilterCheckbox(firstTenRests);
       })
       .catch(err => {
         console.error(err);
@@ -113,5 +140,46 @@ sortDescBtn.addEventListener('click', function (e) {
   renderRestaurants(firstTenRests, sortAsc, !sortDesc);
 });
 
+// Hide/show filter dropdown
+filterDropBtn.addEventListener('click', function (e) {
+  e.preventDefault();
+  filterDropMenu.classList.toggle('hidden');
+});
 
-// 1. create the checkbox dinamically 2. 
+// Hide filter dropdown when clicking outside
+document.addEventListener('click', function (e) {
+  if (!filterDropBtn.contains(e.target) && !filterDropMenu.contains(e.target)) {
+    filterDropMenu.classList.add('hidden');
+  }
+});
+
+// retrieve checked cuisines
+cuisineList.addEventListener('change', function (e) {
+  checkedCuisines = Array.from(
+    cuisineList.querySelectorAll('input[type="checkbox"]:checked'),
+  ).map(checkbox => checkbox.name);
+
+  console.log(checkedCuisines);
+});
+
+// apply filter
+applyFilterBtn.addEventListener('click', function () {
+  if (!checkedCuisines || checkedCuisines.length === 0) {
+    renderRestaurants(firstTenRests, sortAsc, sortDesc);
+    return;
+  }
+
+  filteredRests = firstTenRests.filter(restaurant =>
+    restaurant.cuisines.some(cuisine => checkedCuisines.includes(cuisine.name)),
+  );
+
+  renderRestaurants(filteredRests);
+});
+
+// Reset filter
+resetFilterBtn.addEventListener('click', function () {
+  Array.from(
+    cuisineList.querySelectorAll('input[type="checkbox"]:checked'),
+  ).forEach(checkbox => (checkbox.checked = false));
+  renderRestaurants(firstTenRests);
+});
