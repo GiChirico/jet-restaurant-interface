@@ -29,7 +29,7 @@ const renderRestaurants = function (
   // clean container
   containerRestaurants.innerHTML = '';
 
-  let currentRests = firstTenRests;
+  let currentRests = [...firstTenRests];
 
   // sorting
   if (sortAsc && !sortDesc)
@@ -44,16 +44,24 @@ const renderRestaurants = function (
   // display restaurant cards
   currentRests.forEach(restaurant => {
     let cardHTML = `
-    <div>
-      <h3>${restaurant.name}</h3>
-      <p>${restaurant.cuisines[0].name} • ${restaurant.cuisines[1].name}</p>
-      <p>${+restaurant.rating.starRating} (${+restaurant.rating.count} ratings)</p>
-      <p> Address: ${restaurant.address?.firstLine || ''}
-        ${restaurant.address?.city ? `, ${restaurant.address.city}` : ''}
-        ${restaurant.address?.postalCode ? ` - ${restaurant.address.postalCode}` : ''}
-      </p>
-      <hr/>
-    </div>`;
+<div class="bg-white rounded-2xl border border-gray-200 p-6 hover:border-green-300 hover:shadow-sm transition-all duration-200 flex items-center gap-6">
+  <div class="flex-shrink-0 w-14 h-14 rounded-xl bg-green-50 border border-green-100 overflow-hidden">
+  <img src="${restaurant.logoUrl}" alt="${restaurant.name} logo" class="w-full h-full object-contain" />
+</div>
+  <div class="flex-1 min-w-0">
+    <h3 class="text-lg font-semibold text-gray-800 mb-1">${restaurant.name}</h3>
+    <p class="text-sm text-green-600 mb-2">
+      ${restaurant.cuisines[0]?.name ?? ''}${restaurant.cuisines[1]?.name ? ` • ${restaurant.cuisines[1].name}` : ''}
+    </p>
+    <p class="text-sm text-gray-400 truncate">
+      📍 ${restaurant.address?.firstLine || ''}${restaurant.address?.city ? `, ${restaurant.address.city}` : ''}${restaurant.address?.postalCode ? ` - ${restaurant.address.postalCode}` : ''}
+    </p>
+  </div>
+  <div class="flex-shrink-0 flex flex-col items-center justify-center bg-gray-50 rounded-xl border border-gray-100 w-20 h-20">
+    <span class="text-xl font-semibold text-gray-800"><span class="text-yellow-400 text-lg">★</span> ${+restaurant.rating.starRating}</span>
+    <span class="text-xs text-gray-400 truncate">${+restaurant.rating.count} ratings</span>
+  </div>
+</div>`;
 
     containerRestaurants.insertAdjacentHTML('beforeend', cardHTML);
   });
@@ -98,22 +106,26 @@ const renderError = function (msg) {
 
 // Get postcode input + Fetch
 submitPostcodeBtn.addEventListener('click', function () {
+  // get postcode
   let postcode = postcodeInput.value.trim().replaceAll(' ', '');
+  // fetch data from API
   const url = `https://uk.api.just-eat.io/discovery/uk/restaurants/enriched/bypostcode/${postcode}`;
   // ! detach url to constant
   const getRestaurantData = function (postcode) {
     fetch(url)
       .then(response => {
+        // error for 404
         if (!response.ok)
           throw new Error(`Postcode not found (${response.status})`);
         return response.json();
       })
       .then(data => {
+        // error for when postcode is not supposed to be valid
         if (!data.restaurants || data.restaurants.length === 0)
           throw new Error('Postcode not found');
-        console.log(firstTenRests, 'befpromise');
+
+        // get 10 first rests
         firstTenRests = data.restaurants.slice(0, 10);
-        console.log(firstTenRests, 'promise');
 
         // display restaurants
         renderRestaurants(firstTenRests);
@@ -127,17 +139,24 @@ submitPostcodeBtn.addEventListener('click', function () {
       });
   };
   getRestaurantData(postcode);
+
+  // clear postcode input
+  postcodeInput.value = '';
 });
 
 // Sort by rating
 sortAscBtn.addEventListener('click', function (e) {
   e.preventDefault();
-  renderRestaurants(firstTenRests, !sortAsc, sortDesc);
+  sortAsc = !sortAsc;
+  sortDesc = false;
+  renderRestaurants(firstTenRests, sortAsc, sortDesc);
 });
 
 sortDescBtn.addEventListener('click', function (e) {
   e.preventDefault();
-  renderRestaurants(firstTenRests, sortAsc, !sortDesc);
+  sortDesc = !sortDesc;
+  sortAsc = false;
+  renderRestaurants(firstTenRests, sortAsc, sortDesc);
 });
 
 // Hide/show filter dropdown
