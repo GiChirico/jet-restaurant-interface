@@ -75,7 +75,11 @@ To handle this, I check whether the `restaurants` array in the response is empty
 
 Another challenge that I faced was that the API returns a `200 OK` even for invalid postcodes (e.g 1234). To solve that, I noticed that some properties in the response would be empty, and I used this as a way to trigger an error warning.
 
-https://github.com/GiChirico/jet-restaurant-interface/blob/main/src/main.js#L50
+```js
+if (!responseData.restaurants || responseData.restaurants.length === 0) {
+  throw new Error('Postcode not found');
+}
+```
 
 ---
 
