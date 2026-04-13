@@ -1,60 +1,125 @@
-import './style.css'
-import javascriptLogo from './assets/javascript.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import { setupCounter } from './counter.js'
+import './style.css';
+import {
+  submitPostcodeBtn,
+  postcodeInput,
+  containerRestaurants,
+  sortAscBtn,
+  sortDescBtn,
+  filterDropBtn,
+  filterDropMenu,
+  cuisineList,
+  applyFilterBtn,
+  resetFilterBtn,
+  checkedCuisineSelector,
+  apiPath,
+} from './constants.js';
 
-document.querySelector('#app').innerHTML = `
-<section id="center">
-  <div class="hero">
-    <img src="${heroImg}" class="base" width="170" height="179">
-    <img src="${javascriptLogo}" class="framework" alt="JavaScript logo"/>
-    <img src=${viteLogo} class="vite" alt="Vite logo" />
-  </div>
-  <div>
-    <h1>Get started</h1>
-    <p>Edit <code>src/main.js</code> and save to test <code>HMR</code></p>
-  </div>
-  <button id="counter" type="button" class="counter"></button>
-</section>
+import { renderRestaurants } from './utils/renderRestaurants.js';
+import { renderFilterCuisines } from './utils/renderFilterCuisines.js';
 
-<div class="ticks"></div>
+// Global variables
+let sortAsc = false;
+let sortDesc = false;
+let firstTenRests = [];
+let filteredRests = [];
+let checkedCuisines;
 
-<section id="next-steps">
-  <div id="docs">
-    <svg class="icon" role="presentation" aria-hidden="true"><use href="/icons.svg#documentation-icon"></use></svg>
-    <h2>Documentation</h2>
-    <p>Your questions, answered</p>
-    <ul>
-      <li>
-        <a href="https://vite.dev/" target="_blank">
-          <img class="logo" src=${viteLogo} alt="" />
-          Explore Vite
-        </a>
-      </li>
-      <li>
-        <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank">
-          <img class="button-icon" src="${javascriptLogo}" alt="">
-          Learn more
-        </a>
-      </li>
-    </ul>
-  </div>
-  <div id="social">
-    <svg class="icon" role="presentation" aria-hidden="true"><use href="/icons.svg#social-icon"></use></svg>
-    <h2>Connect with us</h2>
-    <p>Join the Vite community</p>
-    <ul>
-      <li><a href="https://github.com/vitejs/vite" target="_blank"><svg class="button-icon" role="presentation" aria-hidden="true"><use href="/icons.svg#github-icon"></use></svg>GitHub</a></li>
-      <li><a href="https://chat.vite.dev/" target="_blank"><svg class="button-icon" role="presentation" aria-hidden="true"><use href="/icons.svg#discord-icon"></use></svg>Discord</a></li>
-      <li><a href="https://x.com/vite_js" target="_blank"><svg class="button-icon" role="presentation" aria-hidden="true"><use href="/icons.svg#x-icon"></use></svg>X.com</a></li>
-      <li><a href="https://bsky.app/profile/vite.dev" target="_blank"><svg class="button-icon" role="presentation" aria-hidden="true"><use href="/icons.svg#bluesky-icon"></use></svg>Bluesky</a></li>
-    </ul>
-  </div>
-</section>
+const renderErrorMessage = function (msg) {
+  // clean container
+  containerRestaurants.innerHTML = '';
+  containerRestaurants.insertAdjacentText('beforeend', msg);
+};
 
-<div class="ticks"></div>
-<section id="spacer"></section>
-`
+// Get postcode input + Fetch
+submitPostcodeBtn.addEventListener('click', function () {
+  // get postcode
+  let postcode = postcodeInput.value.trim().replaceAll(' ', '');
+  // fetch reponseData from API
+  const url = `${apiPath}/${postcode}`;
 
-setupCounter(document.querySelector('#counter'))
+  const fetchRestaurantreponseData = async function () {
+    try {
+      const res = await fetch(url);
+
+      // error for not okay response
+      if (!res.ok) throw new Error(`Postcode not found (${res.status})`);
+
+      const reponseData = await res.json();
+
+      // error for when postcode is not supposed to be valid
+      if (!reponseData.restaurants || reponseData.restaurants.length === 0)
+        throw new Error('Postcode not found');
+
+      firstTenRests = reponseData.restaurants.slice(0, 10);
+
+      renderRestaurants(firstTenRests);
+
+      // render cuisines array for filter
+      renderFilterCuisines(firstTenRests);
+    } catch (err) {
+      console.error(err);
+      renderErrorMessage(`Something went wrong. ${err.message}. Try again!`);
+    }
+  };
+  fetchRestaurantreponseData();
+
+  // clear postcode input
+  postcodeInput.value = '';
+});
+
+// Sort by rating
+sortAscBtn.addEventListener('click', function (e) {
+  e.preventDefault();
+  sortAsc = !sortAsc;
+  sortDesc = false;
+  renderRestaurants(firstTenRests, sortAsc, sortDesc);
+});
+
+sortDescBtn.addEventListener('click', function (e) {
+  e.preventDefault();
+  sortDesc = !sortDesc;
+  sortAsc = false;
+  renderRestaurants(firstTenRests, sortAsc, sortDesc);
+});
+
+// Hide/show filter dropdown
+filterDropBtn.addEventListener('click', function (e) {
+  e.preventDefault();
+  filterDropMenu.classList.toggle('hidden');
+});
+
+// Hide filter dropdown when clicking outside
+document.addEventListener('click', function (e) {
+  if (!filterDropBtn.contains(e.target) && !filterDropMenu.contains(e.target)) {
+    filterDropMenu.classList.add('hidden');
+  }
+});
+
+// retrieve checked cuisines
+cuisineList.addEventListener('change', function (e) {
+  checkedCuisines = Array.from(
+    cuisineList.querySelectorAll(checkedCuisineSelector),
+  ).map(checkbox => checkbox.name);
+});
+
+// apply filter
+applyFilterBtn.addEventListener('click', function () {
+  if (!checkedCuisines || checkedCuisines.length === 0) {
+    renderRestaurants(firstTenRests, sortAsc, sortDesc);
+    return;
+  }
+
+  filteredRests = firstTenRests.filter(restaurant =>
+    restaurant.cuisines.some(cuisine => checkedCuisines.includes(cuisine.name)),
+  );
+
+  renderRestaurants(filteredRests);
+});
+
+// Reset filter
+resetFilterBtn.addEventListener('click', function () {
+  Array.from(cuisineList.querySelectorAll(checkedCuisineSelector)).forEach(
+    checkbox => (checkbox.checked = false),
+  );
+  renderRestaurants(firstTenRests);
+});
