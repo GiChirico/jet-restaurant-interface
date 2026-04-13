@@ -37,7 +37,7 @@ submitPostcodeBtn.addEventListener('click', function () {
   // fetch reponseData from API
   const url = `${apiPath}/${postcode}`;
 
-  const fetchRestaurantreponseData = async function () {
+  const fetchRestaurantResponseData = async function () {
     try {
       const res = await fetch(url);
 
@@ -61,7 +61,7 @@ submitPostcodeBtn.addEventListener('click', function () {
       renderErrorMessage(`Something went wrong. ${err.message}. Try again!`);
     }
   };
-  fetchRestaurantreponseData();
+  fetchRestaurantResponseData();
 
   // clear postcode input
   postcodeInput.value = '';
