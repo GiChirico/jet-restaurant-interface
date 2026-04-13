@@ -86,10 +86,10 @@ const renderFilterCheckbox = function (firstTenRests) {
 
   cuisines.forEach(cuisine => {
     let checkboxHTML = `
-    <div class="flex items-center gap-3 px-3 py-2 hover:bg-gray-100 rounded-xl cursor-pointer">
-      <input type="checkbox" id="${cuisine.toLowerCase()}" name="${cuisine}" class="w-4 h-4 accent-red-500"/>
-      <label for="${cuisine.toLowerCase()}" class="text-gray-700">${cuisine}</label>
-    </div>`;
+<div class="flex items-center gap-3 px-3 py-2 hover:bg-green-50 rounded-xl cursor-pointer">
+  <input type="checkbox" id="${cuisine.toLowerCase()}" name="${cuisine}" class="w-4 h-4 accent-green-500"/>
+  <label for="${cuisine.toLowerCase()}" class="text-sm text-gray-600 cursor-pointer">${cuisine}</label>
+</div>`;
 
     cuisineList.insertAdjacentHTML('beforeend', checkboxHTML);
   });
@@ -111,34 +111,33 @@ submitPostcodeBtn.addEventListener('click', function () {
   // fetch data from API
   const url = `https://uk.api.just-eat.io/discovery/uk/restaurants/enriched/bypostcode/${postcode}`;
   // ! detach url to constant
-  const getRestaurantData = function (postcode) {
-    fetch(url)
-      .then(response => {
-        // error for 404
-        if (!response.ok)
-          throw new Error(`Postcode not found (${response.status})`);
-        return response.json();
-      })
-      .then(data => {
-        // error for when postcode is not supposed to be valid
-        if (!data.restaurants || data.restaurants.length === 0)
-          throw new Error('Postcode not found');
+  const getRestaurantData = async function () {
+    try {
+      const res = await fetch(url);
 
-        // get 10 first rests
-        firstTenRests = data.restaurants.slice(0, 10);
+      // error for 404
+      if (!res.ok) throw new Error(`Postcode not found (${res.status})`);
 
-        // display restaurants
-        renderRestaurants(firstTenRests);
+      const data = await res.json();
 
-        // render cuisines array for filter
-        renderFilterCheckbox(firstTenRests);
-      })
-      .catch(err => {
-        console.error(err);
-        renderError(`Something went wrong. ${err.message}. Try again!`);
-      });
+      // error for when postcode is not supposed to be valid
+      if (!data.restaurants || data.restaurants.length === 0)
+        throw new Error('Postcode not found');
+
+      // get 10 first rests
+      firstTenRests = data.restaurants.slice(0, 10);
+
+      // display restaurants
+      renderRestaurants(firstTenRests);
+
+      // render cuisines array for filter
+      renderFilterCheckbox(firstTenRests);
+    } catch (err) {
+      console.error(err);
+      renderError(`Something went wrong. ${err.message}. Try again!`);
+    }
   };
-  getRestaurantData(postcode);
+  getRestaurantData();
 
   // clear postcode input
   postcodeInput.value = '';
