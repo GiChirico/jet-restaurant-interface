@@ -1,4 +1,5 @@
 import { containerRestaurants } from '../constants';
+import { sortRestaurants } from './sortRestaurants';
 
 export const renderRestaurants = function (
   firstTenRests,
@@ -11,14 +12,7 @@ export const renderRestaurants = function (
   let currentRests = [...firstTenRests];
 
   // sorting
-  if (sortAsc && !sortDesc)
-    currentRests.sort((restA, restB) => {
-      return restA.rating.starRating - restB.rating.starRating;
-    });
-  if (!sortAsc && sortDesc)
-    currentRests.sort((restA, restB) => {
-      return restB.rating.starRating - restA.rating.starRating;
-    });
+  sortRestaurants(currentRests, sortAsc, sortDesc);
 
   // display restaurant cards
   currentRests.forEach(restaurant => {
