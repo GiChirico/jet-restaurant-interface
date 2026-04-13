@@ -11,4 +11,6 @@ export const sortRestaurants = function (
     restaurants.sort((restA, restB) => {
       return restB.rating.starRating - restA.rating.starRating;
     });
+
+  return restaurants;
 };
