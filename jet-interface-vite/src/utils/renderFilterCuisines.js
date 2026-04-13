@@ -4,13 +4,7 @@ export const renderFilterCuisines = function (firstTenRests) {
   cuisineList.innerHTML = '';
 
   // retrieve cuisines
-  const cuisines = [
-    ...new Set(
-      firstTenRests
-        .flatMap(restaurant => restaurant.cuisines.slice(0, 2))
-        .map(cuisine => cuisine.name),
-    ),
-  ];
+  getCuisines(firstTenRests);
 
   // add cuisines as checkboxes
 
