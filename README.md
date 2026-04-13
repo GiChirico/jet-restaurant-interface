@@ -15,29 +15,29 @@ Hello, welcome to my proposed solution for JUST EAT TAKEAWAY technical assignmen
 
 ## Design Process
 
-To begin this project, before writing any code, I needed to fully understand the user's perspective and brainstormed about what the user would want to see and do with it; and that's how I came up with the [user stories](https://excalidraw.com/?element=pMlRDtedZWk6Plr0HAJZ_) for this assignment:
+To begin this project, before writing any code, I needed to fully understand the user's perspective and brainstormed about what the user would want to see and do with it; and that's how I came up with the user stories for this assignment:
 
 1. **User Stories**
    ([view on Excalidraw](https://excalidraw.com/?element=pMlRDtedZWk6Plr0HAJZ_))
 
    ![Excalidraw user stories section](docs/images/1.png)
 
-After that, I started to draft what would be the [main features](https://excalidraw.com/?element=8qwPc6mVMiDHzXVZ_wfU7) of the project.
+After that, I started to draft what would be the main features of the project.
 
-2. **Feature Planning**
+1. **Feature Planning**
    ([view on Excalidraw](https://excalidraw.com/?element=8qwPc6mVMiDHzXVZ_wfU7))
 
    ![Excalidraw main features section](docs/images/2.png)
 
-Then, to visualise all the different actions a user can take and how the program will react, I put these features into a [flowchart.](https://excalidraw.com/?element=y0S3RakBM0FL7Kzxe9vin) , this helped me organise the code.
+Then, to visualise all the different actions a user can take and how the program will react, I put these features into a flowchart , this helped me organise the code.
 
 3. **Flowchart** — ([view on Excalidraw](https://excalidraw.com/?element=y0S3RakBM0FL7Kzxe9vin))
 
 ![Excalidraw flowchart section](docs/images/3.png)
 
-At last, to help me preview how it would look, I drafted a [mockup](https://excalidraw.com/?element=OAjABVIbdZGoX7Afgad1w)
+At last, to help me preview how it would look, I drafted a mockup.
 
-4. **Mockup** — ([view on Excalidraw](https://excalidraw.com/?element=OAjABVIbdZGoX7Afgad1w))
+1. **Mockup** — ([view on Excalidraw](https://excalidraw.com/?element=OAjABVIbdZGoX7Afgad1w))
 
 ![Excalidraw mockup section](docs/images/4.png)
 
