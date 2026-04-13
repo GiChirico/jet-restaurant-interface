@@ -40,7 +40,7 @@ Before writing any code, I went through a structured design process to understan
 
 5. **Mockup** — drafted a visual preview of the UI before building it ([view on Excalidraw](https://excalidraw.com/?element=OAjABVIbdZGoX7Afgad1w))
 
-![Excalidraw mockup section](docs/images/4.png) 6.
+![Excalidraw mockup section](docs/images/4.png)
 
 ---
 
@@ -115,3 +115,15 @@ npm test
 ```
 
 > Tip: `npm run test` also works.
+
+Once the app is up and running, you will see this page:
+
+![homepage](docs/images/5.png)
+
+You can insert a valid UK postcode (e.g DH4 5GZ) and you'll see the results after clicking on the 'Search' button or pressing the ENTER key.
+
+![restaurant results](docs/images/6.png)
+
+If you type an invalid postcode, you'll get an error message.
+
+![error message](docs/images/7.png)
