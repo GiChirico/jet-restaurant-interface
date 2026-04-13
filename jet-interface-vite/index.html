@@ -2,12 +2,114 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>jet-interface-vite</title>
+    <title>JET Restaurant Interface</title>
   </head>
-  <body>
-    <div id="app"></div>
+  <body class="bg-gray-50 min-h-screen flex flex-col">
+    <header
+      class="bg-white border-b border-gray-200 px-6 py-3 flex items-center justify-between sticky top-0 z-40 shadow-sm"
+    >
+      <div class="w-10"></div>
+      <h1 class="text-lg font-semibold text-gray-800 tracking-tight">
+        JET Restaurant Interface
+      </h1>
+      <img
+        class="size-10 rounded-full"
+        src="./src/assets/take-away.png"
+        alt="food delivery logo"
+      />
+    </header>
+
+    <main class="flex-1 flex flex-col">
+      <section
+        class="flex flex-col items-center justify-center py-16 px-4 bg-white border-b border-gray-100"
+      >
+        <h2 class="text-4xl font-bold text-gray-800 mb-2 text-center">
+          Have food delivered anywhere you are!
+        </h2>
+        <p class="text-gray-400 mb-8 text-center text-lg">
+          Enter your postcode to find nearby restaurants
+        </p>
+        <div class="flex items-center gap-3 w-full max-w-md">
+          <input
+            type="text"
+            name="postcode-input"
+            id="postcode-input"
+            placeholder="e.g. EC1A 1BB"
+            class="flex-1 px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent text-gray-700 placeholder-gray-400 shadow-sm"
+          />
+          <button
+            id="submit-btn"
+            class="px-5 py-3 bg-green-500 hover:bg-green-600 text-white font-medium rounded-xl shadow-sm transition-colors duration-200 flex items-center gap-2"
+          >
+            Search
+            <span class="text-base">🔎</span>
+          </button>
+        </div>
+      </section>
+
+      <section class="flex-1 px-6 py-8 max-w-7xl mx-auto w-full">
+        <div class="flex items-center justify-between mb-6 flex-wrap gap-3">
+          <h3 class="text-gray-700 font-medium text-sm">
+            Restaurants near you
+          </h3>
+          <div class="flex items-center gap-2 flex-wrap">
+            <button
+              id="btn-sort-asc"
+              class="flex items-center gap-1.5 px-3 py-2 text-sm bg-white border border-gray-300 rounded-lg hover:border-green-400 hover:text-green-600 transition-colors text-gray-600"
+            >
+              ⬆ Rating
+            </button>
+            <button
+              id="btn-sort-desc"
+              class="flex items-center gap-1.5 px-3 py-2 text-sm bg-white border border-gray-300 rounded-lg hover:border-green-400 hover:text-green-600 transition-colors text-gray-600"
+            >
+              ⬇ Rating
+            </button>
+            <div id="container-filter" class="relative">
+              <button
+                id="filter-dropdown-btn"
+                class="flex items-center gap-2 px-3 py-2 text-sm bg-white border border-gray-300 rounded-lg hover:border-green-400 hover:text-green-600 transition-colors text-gray-600"
+              >
+                🍽 Filter cuisine
+                <span class="text-xs text-gray-400">▼</span>
+              </button>
+
+              <div
+                id="filter-dropdown-menu"
+                class="hidden absolute right-0 mt-2 w-64 bg-white border border-gray-200 rounded-2xl shadow-xl z-50 max-h-64 overflow-auto py-2"
+              >
+                <div class="p-3 space-y-1" id="cuisine-list"></div>
+              </div>
+            </div>
+            <button
+              id="apply-filters-btn"
+              class="px-4 py-2 text-sm bg-green-500 hover:bg-green-600 text-white font-medium rounded-lg shadow-sm transition-colors duration-200"
+            >
+              Apply
+            </button>
+            <button
+              id="reset-filters-btn"
+              class="px-4 py-2 text-sm bg-white border border-gray-300 hover:border-red-400 hover:text-red-500 text-gray-600 font-medium rounded-lg transition-colors duration-200"
+            >
+              Reset
+            </button>
+          </div>
+        </div>
+        <div id="container-restaurants" class="flex flex-col gap-4"></div>
+      </section>
+    </main>
+    <footer
+      class="bg-white border-t border-gray-100 py-3 px-6 text-center text-xs text-gray-400"
+    >
+      <a
+        href="https://www.flaticon.com/free-icons/food-delivery"
+        title="food delivery icons"
+        class="hover:text-green-500 transition-colors"
+      >
+        Food delivery icons created by iconixar - Flaticon
+      </a>
+    </footer>
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>
