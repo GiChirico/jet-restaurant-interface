@@ -1,15 +1,15 @@
 # JET Restaurant Interface
 
-Hello, welcome to my proposed solution for JUST EAT TAKEAWAY technical assignment, I decided to make a simple interface using simple HTML, CSS and JavaScript.
+Hello, welcome to my proposed solution for JUST EAT TAKEAWAY technical assignment, I decided to make a simple interface using HTML, CSS and JavaScript.
 
 ---
 
 ## Tech Stack
 
-- **Vite** — dev server & build tool (also used for API proxying)
-- **Tailwind CSS v4** — utility-first styling
-- **Vanilla JavaScript** — no frameworks, just clean JS
-- **Vitest** — unit testing
+- **Vite**
+- **Tailwind CSS v4**
+- **Vanilla JavaScript**
+- **Vitest**
 
 ---
 
@@ -22,14 +22,14 @@ To begin this project, before writing any code, I needed to fully understand the
 
    ![Excalidraw user stories section](docs/images/1.png)
 
-   After that, I started to draft what would be the [main features](https://excalidraw.com/?element=8qwPc6mVMiDHzXVZ_wfU7) of the project.
+After that, I started to draft what would be the [main features](https://excalidraw.com/?element=8qwPc6mVMiDHzXVZ_wfU7) of the project.
 
 2. **Feature Planning**
    ([view on Excalidraw](https://excalidraw.com/?element=8qwPc6mVMiDHzXVZ_wfU7))
 
    ![Excalidraw main features section](docs/images/2.png)
 
-   Then, to visualise all the different actions a user can take and how the program will react, I put these features into a [flowchart.](https://excalidraw.com/?element=y0S3RakBM0FL7Kzxe9vin) , this helped me organise the code.
+Then, to visualise all the different actions a user can take and how the program will react, I put these features into a [flowchart.](https://excalidraw.com/?element=y0S3RakBM0FL7Kzxe9vin) , this helped me organise the code.
 
 3. **Flowchart** — ([view on Excalidraw](https://excalidraw.com/?element=y0S3RakBM0FL7Kzxe9vin))
 
@@ -40,6 +40,8 @@ At last, to help me preview how it would look, I drafted a [mockup](https://exca
 4. **Mockup** — ([view on Excalidraw](https://excalidraw.com/?element=OAjABVIbdZGoX7Afgad1w))
 
 ![Excalidraw mockup section](docs/images/4.png)
+
+[Link to complete Excalidraw](https://excalidraw.com/#json=i2bySfTZ4A_72CNbyC_v5,mWv5mrJYUbh0FgLONCd-eQ)
 
 ---
 
@@ -73,11 +75,7 @@ To handle this, I check whether the `restaurants` array in the response is empty
 
 Another challenge that I faced was that the API returns a `200 OK` even for invalid postcodes (e.g 1234). To solve that, I noticed that some properties in the response would be empty, and I used this as a way to trigger an error warning.
 
-```js
-if (!responseData.restaurants || responseData.restaurants.length === 0) {
-  throw new Error('Postcode not found');
-}
-```
+https://github.com/GiChirico/jet-restaurant-interface/blob/main/src/main.js#L50
 
 ---
 
