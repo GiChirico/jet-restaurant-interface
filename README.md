@@ -1,6 +1,6 @@
-# 🍔 JET Restaurant Interface
+# JET Restaurant Interface
 
-A frontend web application built as part of the Just Eat Takeaway technical assignment. It allows users to search for restaurants by UK postcode using the Just Eat public API.
+Hello, welcome to my proposed solution for JUST EAT TAKEAWAY technical assignment, I decided to make a simple interface using simple HTML, CSS and JavaScript.
 
 ---
 
@@ -13,42 +13,43 @@ A frontend web application built as part of the Just Eat Takeaway technical assi
 
 ---
 
-## Features
-
-- Search restaurants by UK postcode
-- Displays restaurant results fetched from the Just Eat API
-- Handles invalid postcodes gracefully with user-friendly error messages
-- Responsive and clean UI
-
----
-
 ## Design Process
 
-Before writing any code, I went through a structured design process to understand the problem from a user's perspective:
+To begin this project, before writing any code, I needed to fully understand the user's perspective and brainstormed about what the user would want to see and do with it; and that's how I came up with the [user stories](https://excalidraw.com/?element=pMlRDtedZWk6Plr0HAJZ_) for this assignment:
 
-1. **User Stories** — identified what a user would want to see and do with the app ([view on Excalidraw](https://excalidraw.com/?element=pMlRDtedZWk6Plr0HAJZ_))
+1. **User Stories**
+   ([view on Excalidraw](https://excalidraw.com/?element=pMlRDtedZWk6Plr0HAJZ_))
 
    ![Excalidraw user stories section](docs/images/1.png)
 
-2. **Feature Planning** — defined the main features the app should support ([view on Excalidraw](https://excalidraw.com/?element=8qwPc6mVMiDHzXVZ_wfU7))
+   After that, I started to draft what would be the [main features](https://excalidraw.com/?element=8qwPc6mVMiDHzXVZ_wfU7) of the project.
+
+2. **Feature Planning**
+   ([view on Excalidraw](https://excalidraw.com/?element=8qwPc6mVMiDHzXVZ_wfU7))
 
    ![Excalidraw main features section](docs/images/2.png)
 
-3. **Flowchart** — mapped out all user actions and how the app responds to them, which helped organise the code structure ([view on Excalidraw](https://excalidraw.com/?element=y0S3RakBM0FL7Kzxe9vin))
+   Then, to visualise all the different actions a user can take and how the program will react, I put these features into a [flowchart.](https://excalidraw.com/?element=y0S3RakBM0FL7Kzxe9vin) , this helped me organise the code.
+
+3. **Flowchart** — ([view on Excalidraw](https://excalidraw.com/?element=y0S3RakBM0FL7Kzxe9vin))
 
 ![Excalidraw flowchart section](docs/images/3.png)
 
-5. **Mockup** — drafted a visual preview of the UI before building it ([view on Excalidraw](https://excalidraw.com/?element=OAjABVIbdZGoX7Afgad1w))
+At last, to help me preview how it would look, I drafted a [mockup](https://excalidraw.com/?element=OAjABVIbdZGoX7Afgad1w)
+
+4. **Mockup** — ([view on Excalidraw](https://excalidraw.com/?element=OAjABVIbdZGoX7Afgad1w))
 
 ![Excalidraw mockup section](docs/images/4.png)
 
 ---
 
-## Challenges (that derived in Technical Decisions)
+## Challenges
 
 ### CORS Handling
 
-The Just Eat API does not support direct browser requests due to CORS restrictions. Rather than using a browser extension or a public proxy (both of which are unsafe and unscalable), I used **Vite's built-in proxy** to forward API requests server-side:
+The first obstacle that I encountered was that the Just Eat API does not support direct browser requests due to CORS restrictions. I initially considered using a browser extension to disable cors protection or a public proxy, however, that would not be a good approach and it is not scalable.
+
+So, after some research, I decided to use VITE on my project because it would allow me to use its proxy, which is safer and more convenient.
 
 ```js
 // vite.config.js
@@ -68,7 +69,9 @@ export default defineConfig({
 
 ### Invalid Postcode Detection
 
-The API returns a `200 OK` even for invalid postcodes. To handle this, I check whether the `restaurants` array in the response is empty and throw an error accordingly:
+To handle this, I check whether the `restaurants` array in the response is empty and throw an error accordingly:
+
+Another challenge that I faced was that the API returns a `200 OK` even for invalid postcodes (e.g 1234). To solve that, I noticed that some properties in the response would be empty, and I used this as a way to trigger an error warning.
 
 ```js
 if (!responseData.restaurants || responseData.restaurants.length === 0) {
