@@ -2,14 +2,12 @@ import { containerRestaurants } from '../constants';
 import { sortRestaurants } from './sortRestaurants';
 
 export const renderRestaurants = function (
-  firstTenRests,
+  currentRests,
   sortAsc = false,
   sortDesc = false,
 ) {
   // clean container
   containerRestaurants.innerHTML = '';
-
-  let currentRests = [...firstTenRests];
 
   // sorting
   sortRestaurants(currentRests, sortAsc, sortDesc);

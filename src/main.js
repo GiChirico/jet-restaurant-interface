@@ -2,7 +2,6 @@ import './style.css';
 import {
   submitPostcodeBtn,
   postcodeInput,
-  containerRestaurants,
   sortAscBtn,
   sortDescBtn,
   filterDropBtn,
@@ -11,60 +10,52 @@ import {
   applyFilterBtn,
   resetFilterBtn,
   checkedCuisineSelector,
-  apiPath,
 } from './constants.js';
-
 import { renderRestaurants } from './utils/renderRestaurants.js';
 import { renderFilterCuisines } from './utils/renderFilterCuisines.js';
+import { fetchRestaurantResponseData } from './utils/fetchRestaurantResponseData.js';
 
 // Global variables
 let sortAsc = false;
 let sortDesc = false;
-let firstTenRests = [];
-let filteredRests = [];
+let allRests = [];
+let currentRests = [];
 let checkedCuisines;
 
-const renderErrorMessage = function (msg) {
-  // clean container
-  containerRestaurants.innerHTML = '';
-  containerRestaurants.insertAdjacentText('beforeend', msg);
+// Handle postcode submission, fetch restaurant data, and render restaurants + filter cuisines
+
+const handlePostcodeSubmission = async function (postcode) {
+  // fetch restaurant data from API
+  const reponseData = await fetchRestaurantResponseData(postcode);
+
+  // get first 10 restaurants from response data
+  allRests = reponseData.restaurants.slice(0, 10);
+  currentRests = allRests;
+
+  // render restaurants
+  renderRestaurants(currentRests);
+
+  // render cuisines array for filter
+  renderFilterCuisines(currentRests);
+
+  // clear postcode input
+  postcodeInput.value = '';
 };
 
 // Get postcode input + Fetch
 submitPostcodeBtn.addEventListener('click', function () {
   // get postcode
   let postcode = postcodeInput.value.trim().replaceAll(' ', '');
-  // fetch reponseData from API
-  const url = `${apiPath}/${postcode}`;
+  handlePostcodeSubmission(postcode);
+});
 
-  const fetchRestaurantResponseData = async function () {
-    try {
-      const res = await fetch(url);
-
-      // error for not okay response
-      if (!res.ok) throw new Error(`Postcode not found (${res.status})`);
-
-      const reponseData = await res.json();
-
-      // error for when postcode is not supposed to be valid
-      if (!reponseData.restaurants || reponseData.restaurants.length === 0)
-        throw new Error('Postcode not found');
-
-      firstTenRests = reponseData.restaurants.slice(0, 10);
-
-      renderRestaurants(firstTenRests);
-
-      // render cuisines array for filter
-      renderFilterCuisines(firstTenRests);
-    } catch (err) {
-      console.error(err);
-      renderErrorMessage(`Something went wrong. ${err.message}. Try again!`);
-    }
-  };
-  fetchRestaurantResponseData();
-
-  // clear postcode input
-  postcodeInput.value = '';
+// Enter key to submit postcode
+postcodeInput.addEventListener('keydown', function (e) {
+  if (e.key === 'Enter') {
+    // get postcode
+    let postcode = postcodeInput.value.trim().replaceAll(' ', '');
+    handlePostcodeSubmission(postcode);
+  }
 });
 
 // Sort by rating
@@ -72,14 +63,14 @@ sortAscBtn.addEventListener('click', function (e) {
   e.preventDefault();
   sortAsc = !sortAsc;
   sortDesc = false;
-  renderRestaurants(firstTenRests, sortAsc, sortDesc);
+  renderRestaurants(currentRests, sortAsc, sortDesc);
 });
 
 sortDescBtn.addEventListener('click', function (e) {
   e.preventDefault();
   sortDesc = !sortDesc;
   sortAsc = false;
-  renderRestaurants(firstTenRests, sortAsc, sortDesc);
+  renderRestaurants(currentRests, sortAsc, sortDesc);
 });
 
 // Hide/show filter dropdown
@@ -105,15 +96,15 @@ cuisineList.addEventListener('change', function (e) {
 // apply filter
 applyFilterBtn.addEventListener('click', function () {
   if (!checkedCuisines || checkedCuisines.length === 0) {
-    renderRestaurants(firstTenRests, sortAsc, sortDesc);
+    renderRestaurants(currentRests, sortAsc, sortDesc);
     return;
   }
 
-  filteredRests = firstTenRests.filter(restaurant =>
+  currentRests = allRests.filter(restaurant =>
     restaurant.cuisines.some(cuisine => checkedCuisines.includes(cuisine.name)),
   );
 
-  renderRestaurants(filteredRests);
+  renderRestaurants(currentRests, sortAsc, sortDesc);
 });
 
 // Reset filter
@@ -121,5 +112,6 @@ resetFilterBtn.addEventListener('click', function () {
   Array.from(cuisineList.querySelectorAll(checkedCuisineSelector)).forEach(
     checkbox => (checkbox.checked = false),
   );
-  renderRestaurants(firstTenRests);
+  currentRests = allRests;
+  renderRestaurants(currentRests, sortAsc, sortDesc);
 });

@@ -1,11 +1,11 @@
 import { cuisineList } from '../constants';
 import { getCuisines } from './getCuisines';
 
-export const renderFilterCuisines = function (firstTenRests) {
+export const renderFilterCuisines = function (currentRests) {
   cuisineList.innerHTML = '';
 
   // retrieve cuisines
-  let cuisines = getCuisines(firstTenRests);
+  let cuisines = getCuisines(currentRests);
 
   // add cuisines as checkboxes
 

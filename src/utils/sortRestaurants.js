@@ -1,16 +1,16 @@
 export const sortRestaurants = function (
-  restaurants,
+  currentRests,
   sortAsc = false,
   sortDesc = false,
 ) {
   if (sortAsc && !sortDesc)
-    restaurants.sort((restA, restB) => {
+    currentRests.sort((restA, restB) => {
       return restA.rating.starRating - restB.rating.starRating;
     });
   if (!sortAsc && sortDesc)
-    restaurants.sort((restA, restB) => {
+    currentRests.sort((restA, restB) => {
       return restB.rating.starRating - restA.rating.starRating;
     });
 
-  return restaurants;
+  return currentRests;
 };
