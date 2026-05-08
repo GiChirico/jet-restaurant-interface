@@ -15,6 +15,7 @@ import {
 import { renderRestaurants } from './utils/renderRestaurants.js';
 import { renderFilterCuisines } from './utils/renderFilterCuisines.js';
 import { fetchRestaurantResponseData } from './utils/fetchRestaurantResponseData.js';
+import { renderSkeletonCards } from './utils/renderSkeletonCards.js';
 
 // Global variables
 let sortAsc = false;
@@ -27,6 +28,9 @@ let checkedCuisines;
 // Handle postcode submission, fetch restaurant data, and render restaurants + filter cuisines
 
 const handlePostcodeSubmission = async function (postcode) {
+  // render skeleton cards while fetching data
+  renderSkeletonCards();
+
   // fetch restaurant data from API
   const reponseData = await fetchRestaurantResponseData(postcode);
 
