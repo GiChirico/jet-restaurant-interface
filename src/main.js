@@ -10,6 +10,7 @@ import {
   applyFilterBtn,
   resetFilterBtn,
   checkedCuisineSelector,
+  recentPostcodesList,
 } from './constants.js';
 import { renderRestaurants } from './utils/renderRestaurants.js';
 import { renderFilterCuisines } from './utils/renderFilterCuisines.js';
@@ -20,6 +21,7 @@ let sortAsc = false;
 let sortDesc = false;
 let allRests = [];
 let currentRests = [];
+let recentPostcodes = [];
 let checkedCuisines;
 
 // Handle postcode submission, fetch restaurant data, and render restaurants + filter cuisines
@@ -38,9 +40,52 @@ const handlePostcodeSubmission = async function (postcode) {
   // render cuisines array for filter
   renderFilterCuisines(currentRests);
 
+  // add postcode to array and save into localStorage
+  recentPostcodes.push(postcode);
+  localStorage.setItem('postcodes', JSON.stringify(recentPostcodes));
+
   // clear postcode input
   postcodeInput.value = '';
 };
+
+// Get recent postcodes from localStorage and render as dropdown list
+const getRecentPostcodes = function () {
+  const storageData = [
+    ...new Set(JSON.parse(localStorage.getItem('postcodes'))),
+  ];
+
+  if (!storageData) return;
+
+  recentPostcodes = storageData;
+
+  // Clear the list first to prevent duplicates
+  recentPostcodesList.innerHTML = '';
+
+  recentPostcodes.forEach(postcode => {
+    const postcodeHTML = `<li id="recent-postcode-item" data-postcode="${postcode}" class="px-4 py-2.5 hover:bg-green-50 cursor-pointer transition-colors text-gray-700 border-b border-gray-100 last:border-b-0 flex items-center gap-2"><img src="./src/assets/clock.png" alt="recent" class="w-4 h-4" /> ${postcode}</li>`;
+    recentPostcodesList.insertAdjacentHTML('beforeend', postcodeHTML);
+  });
+
+  recentPostcodesList.classList.remove('hidden');
+};
+
+// get recent postcodes list
+postcodeInput.addEventListener('click', function (e) {
+  e.preventDefault();
+  getRecentPostcodes();
+});
+
+// Handle click on recent postcode item
+recentPostcodesList.addEventListener('click', function (e) {
+  const clickedItem = e.target.closest('#recent-postcode-item');
+
+  if (!clickedItem) return;
+
+  const postcode = clickedItem.textContent.trim().replaceAll(' ', '');
+  handlePostcodeSubmission(postcode);
+
+  recentPostcodesList.classList.add('hidden');
+});
 
 // Get postcode input + Fetch
 submitPostcodeBtn.addEventListener('click', function () {
@@ -73,16 +118,22 @@ sortDescBtn.addEventListener('click', function (e) {
   renderRestaurants(currentRests, sortAsc, sortDesc);
 });
 
-// Hide/show filter dropdown
+// show filter dropdown
 filterDropBtn.addEventListener('click', function (e) {
   e.preventDefault();
   filterDropMenu.classList.toggle('hidden');
 });
 
-// Hide filter dropdown when clicking outside
+// Hide filter and recent search dropdowns when clicking outside
 document.addEventListener('click', function (e) {
   if (!filterDropBtn.contains(e.target) && !filterDropMenu.contains(e.target)) {
     filterDropMenu.classList.add('hidden');
+  }
+  if (
+    !postcodeInput.contains(e.target) &&
+    !recentPostcodesList.contains(e.target)
+  ) {
+    recentPostcodesList.classList.add('hidden');
   }
 });
 

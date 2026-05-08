@@ -30,14 +30,19 @@
         <p class="text-gray-400 mb-8 text-center text-lg">
           Enter your postcode to find nearby restaurants
         </p>
-        <div class="flex items-center gap-3 w-full max-w-md">
+        <div class="flex items-center gap-3 w-full max-w-md relative">
           <input
             type="text"
             name="postcode-input"
             id="postcode-input"
             placeholder="e.g. EC1A 1BB"
+            autocomplete="off"
             class="flex-1 px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent text-gray-700 placeholder-gray-400 shadow-sm"
           />
+          <ul
+            id="recent-postcodes-list"
+            class="hidden absolute top-full left-0 right-0 z-50 shadow-xl bg-white border border-gray-200 rounded-lg mt-2 max-h-48 overflow-y-auto text-left"
+          ></ul>
           <button
             id="submit-btn"
             class="px-5 py-3 bg-green-500 hover:bg-green-600 text-white font-medium rounded-xl shadow-sm transition-colors duration-200 flex items-center gap-2"
@@ -109,6 +114,12 @@
       >
         Food delivery icons created by iconixar - Flaticon
       </a>
+      <a
+        href="https://www.flaticon.com/free-icons/recent"
+        title="recent icons"
+        class="hover:text-green-500 transition-colors"
+        >Recent icons created by Xinh Studio - Flaticon</a
+      >
     </footer>
     <script type="module" src="/src/main.js"></script>
   </body>

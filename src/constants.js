@@ -10,6 +10,9 @@ export const filterDropMenu = document.getElementById('filter-dropdown-menu');
 export const cuisineList = document.getElementById('cuisine-list');
 export const applyFilterBtn = document.getElementById('apply-filters-btn');
 export const resetFilterBtn = document.getElementById('reset-filters-btn');
+export const recentPostcodesList = document.getElementById(
+  'recent-postcodes-list',
+);
 
 export const checkedCuisineSelector = 'input[type="checkbox"]:checked';
 
