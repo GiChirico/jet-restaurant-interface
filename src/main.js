@@ -11,6 +11,7 @@ import {
   resetFilterBtn,
   checkedCuisineSelector,
   recentPostcodesList,
+  favoriteRestaurantBtn,
 } from './constants.js';
 import { renderRestaurants } from './utils/renderRestaurants.js';
 import { renderFilterCuisines } from './utils/renderFilterCuisines.js';
@@ -23,7 +24,7 @@ let sortDesc = false;
 let allRests = [];
 let currentRests = [];
 let recentPostcodes = [];
-let checkedCuisines;
+let checkedCuisines = [];
 
 // Handle postcode submission, fetch restaurant data, and render restaurants + filter cuisines
 
@@ -105,6 +106,48 @@ postcodeInput.addEventListener('keydown', function (e) {
     let postcode = postcodeInput.value.trim().replaceAll(' ', '');
     handlePostcodeSubmission(postcode);
   }
+});
+
+// favorites button
+favoriteRestaurantBtn.addEventListener('click', function () {
+  const favoriteRestaurants =
+    JSON.parse(localStorage.getItem('favoriteRestaurants')) || [];
+
+  if (favoriteRestaurants.length === 0) {
+    alert('You have no favorite restaurants yet!');
+    return;
+  }
+
+  currentRests = favoriteRestaurants;
+  renderRestaurants(currentRests);
+});
+
+// favoriting restaurant
+document.addEventListener('click', function (e) {
+  const restaurantEl = e.target.closest('.restaurant-card');
+  if (!restaurantEl) return;
+
+  const heartBtn = restaurantEl.querySelector('button');
+  heartBtn.classList.toggle('text-red-500');
+  heartBtn.classList.toggle('text-gray-300');
+
+  const restaurantId = restaurantEl.dataset.id;
+  const restaurant = currentRests.find(rest => rest.id === restaurantId);
+
+  let favoriteRestaurants =
+    JSON.parse(localStorage.getItem('favoriteRestaurants')) || [];
+  const index = favoriteRestaurants.findIndex(rest => rest.id === restaurantId);
+
+  if (index > -1) {
+    favoriteRestaurants.splice(index, 1);
+  } else {
+    favoriteRestaurants.push(restaurant);
+  }
+
+  localStorage.setItem(
+    'favoriteRestaurants',
+    JSON.stringify(favoriteRestaurants),
+  );
 });
 
 // Sort by rating

@@ -13,6 +13,7 @@ export const resetFilterBtn = document.getElementById('reset-filters-btn');
 export const recentPostcodesList = document.getElementById(
   'recent-postcodes-list',
 );
+export const favoriteRestaurantBtn = document.getElementById('btn-favorites');
 
 export const checkedCuisineSelector = 'input[type="checkbox"]:checked';
 
